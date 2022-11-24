@@ -1,22 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-type ThemeState = boolean;
+type ThemeState = {
+  theme: boolean;
+  loading: boolean;
+};
 
 const themeFromLocalStorage = !!localStorage.getItem("movies-theme");
 
-const initialState: ThemeState = themeFromLocalStorage;
+const initialState: ThemeState = {
+  theme: themeFromLocalStorage,
+  loading: false,
+};
 
 export const themeSlice = createSlice({
   name: "theme",
   initialState,
   reducers: {
     toggleTheme: (state) => {
-      if (state) {
-        localStorage.removeItem("movies-theme")
-      } else {
-        localStorage.setItem("movies-theme", "_")
-      }
-      return (state = !state);
+      localStorage.setItem("movies-theme", String(!state.theme));
+      // return loading equal to true
+      return { ...state, theme: !state.theme, loading: true };
     },
   },
 });
